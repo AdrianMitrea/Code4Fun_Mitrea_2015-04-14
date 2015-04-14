@@ -10,6 +10,7 @@ namespace Code4Fun
     {
         static void Main(string[] args)
         {
+            string s;
         }
     }
 }
