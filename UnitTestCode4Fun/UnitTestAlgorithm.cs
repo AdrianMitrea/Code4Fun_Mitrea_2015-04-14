@@ -8,20 +8,10 @@ namespace UnitTestCode4Fun
 {
     struct Messages
     {
-        public const string Record_Excluded = "Record excluded from calculation";
         public const string Test_Failed = "Test failed";
-        public const string Test_Succeded = "Test succeded";
         public const string Average_Failed = "Average latency calculated incorrectly";
         public const string Total_Failed = "Total bandwidth calculated incorrectly";
-    }
-
-    struct TSVData
-    {
-        public string file_name;
-        public int num_connections;
-        public int latency_ms;
-        public int bandwidth;
-    }
+    }    
 
     [TestClass]
     public class UnitTestAlgorithm
@@ -59,7 +49,7 @@ namespace UnitTestCode4Fun
 
             Algorithm a = new Algorithm();
 
-            a.Statistics(ref latency, ref bandwidth, 0, 0);
+            a.Statistics(ref latency, ref bandwidth, data);
         }
 
         [TestMethod]
@@ -79,21 +69,23 @@ namespace UnitTestCode4Fun
             {
                 Algorithm a = new Algorithm();
 
-                foreach (TSVData item in data)
-                {
-                    if (a.Statistics(ref averageLatency, ref totalBandwidth, item.latency_ms, item.bandwidth))
+                    if (!a.Statistics(ref averageLatency, ref totalBandwidth, data))
                     {
+                        Assert.Fail(Messages.Test_Failed);
                     }
-                    else
-                    {
-                        Assert.Fail(Messages.Record_Excluded);
-                    }
-                }
 
-                Assert.AreNotEqual(averageLatency, averageLatencyEx, Messages.Average_Failed);
-                Assert.AreNotEqual(totalBandwidth, totalBandwidth, Messages.Total_Failed);
+                Assert.AreEqual(totalBandwidth, totalBandwidthEx, Messages.Total_Failed);
+                Assert.AreEqual(averageLatency, averageLatencyEx, Messages.Average_Failed);
+            }
+            catch (NullReferenceException e)
+            {
+                Assert.Fail(e.Message);
             }
             catch(ArgumentOutOfRangeException e)
+            {
+                Assert.Fail(e.Message);
+            }
+            catch (DivideByZeroException e)
             {
                 Assert.Fail(e.Message);
             }
