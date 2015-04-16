@@ -4,11 +4,24 @@ using Code4Fun;
 
 namespace UnitTestCode4Fun
 {
+    struct data
+    {
+        int num_connections;
+        int latency_ms;
+        int bandwidth;
+    }
+
     [TestClass]
     public class UnitTestAlgorithm
     {
+        public UnitTestAlgorithm()
+        {
+            //creating input data (random)
+
+        }
+
         [TestMethod]
-        public void TestMethod1()
+        public void TestCallMethod()
         {
             double latency = 0, bandwidth = 0;
             
