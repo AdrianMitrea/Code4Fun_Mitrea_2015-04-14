@@ -75,21 +75,32 @@ namespace UnitTestCode4Fun
             totalBandwidthEx = data.Where(x => x.bandwidth > 0).Sum(x => x.bandwidth);
 
             //calculeted values with method
-            Algorithm a = new Algorithm();
-
-            foreach (TSVData item in data)
+            try
             {
-                if (a.Statistics(ref averageLatency, ref totalBandwidth, item.latency_ms, item.bandwidth))
-                {
-                }
-                else
-                {
-                    Assert.Fail(Messages.Record_Excluded);
-                }
-            }
+                Algorithm a = new Algorithm();
 
-            Assert.AreNotEqual(averageLatency, averageLatencyEx, Messages.Average_Failed);
-            Assert.AreNotEqual(totalBandwidth, totalBandwidth, Messages.Total_Failed);
+                foreach (TSVData item in data)
+                {
+                    if (a.Statistics(ref averageLatency, ref totalBandwidth, item.latency_ms, item.bandwidth))
+                    {
+                    }
+                    else
+                    {
+                        Assert.Fail(Messages.Record_Excluded);
+                    }
+                }
+
+                Assert.AreNotEqual(averageLatency, averageLatencyEx, Messages.Average_Failed);
+                Assert.AreNotEqual(totalBandwidth, totalBandwidth, Messages.Total_Failed);
+            }
+            catch(ArgumentOutOfRangeException e)
+            {
+                Assert.Fail(e.Message);
+            }
+            catch(Exception e)
+            {
+                Assert.Fail(e.Message);
+            }            
         }
     }
 }
